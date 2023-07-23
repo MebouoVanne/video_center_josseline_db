@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Video;
 use App\Form\VideoType;
 use App\Repository\VideoRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,11 +15,21 @@ use Doctrine\ORM\EntityManagerInterface;
 class VideoController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(VideoRepository $videoRepository, Request $request): Response
+    public function index(
+        VideoRepository $videoRepository, 
+        Request $request,
+        PaginatorInterface $paginator,): Response
     {
+
+        $videos = $paginator->paginate(
+            $videoRepository->findAll(),
+            $request->query->getInt('page', 1),
+            10
+        );
+
     
         return $this->render('video/index.html.twig', [
-        'videos'=>$videoRepository->findAll(),
+        'videos'=>$videos,
             
         ]);
     }
@@ -41,6 +52,11 @@ class VideoController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
             $manager->persist($video);
             $manager->flush();
+            $this->addFlash(
+                'success',
+                'Votre vidéo a été ajouter avec succès !'
+            );
+    
             return $this->redirectToRoute('app_home');
  }
  return $this->render('video/create.html.twig', ['form' => $form->createView()]); 
@@ -58,6 +74,12 @@ class VideoController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
             $manager->persist($video);
             $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre video a été modifier avec succès !'
+            );
+    
             return $this->redirectToRoute('app_home');
  }
  return $this->render('video/edit.html.twig', ['form' => $form->createView()]); 
@@ -71,6 +93,11 @@ class VideoController extends AbstractController
     {
             $manager->remove($video);
             $manager->flush();
+            $this->addFlash(
+                'success',
+                'Votre video a été supprimé avec succès !'
+            );
+    
             return $this->redirectToRoute('app_home');
 
     }

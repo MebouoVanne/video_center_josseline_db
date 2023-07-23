@@ -3,11 +3,19 @@
  {% block body %}
 <article>
 <h1>{{ video.title }}</h1>
-<p>{{ video.videoLink }}</p>
+<iframe width="640" height="480" src={{video.videoLink}} ></iframe>
 <p>{{ video.description }}</p>
 
-<p>Submitted {{ video.createdAt|date }}</p>
+<p>Soumis {{ video.createdAt|date }}</p>
+<p>Dernière modification {{ video.updatedAt|date("d/m/y H :i") }}</p>
 </article>
-<a href="{{ path('app_video_edit' ,{id:video.id}) }}">Edit</a>
+
+<td>
+<a href="{{ path('app_video_edit', { id: video.id }) }}" >Modifier</a>
+</td>
+<td>
+	<a href="{{ path('app_video_delete', { id: video.id }) }}" >Supprimer</a>
+</td>
+
 <a href="{{ path('app_home') }}">Go Back</a>
  {% endblock %}

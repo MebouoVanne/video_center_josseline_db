@@ -6,6 +6,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarColor01">
       <ul class="navbar-nav me-auto">
+
+      {% if app.user %}
         <li class="nav-item">
           <a class="nav-link active" href="{{path('app_home')}}">Video Center
             <span class="visually-hidden">(current)</span>
@@ -14,12 +16,20 @@
         <li class="nav-item">
           <a class="nav-link" href="{{path('app_video_create')}}">Créer une Vidéo</a>
         </li>
-        {# <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
+        <li class="nav-item">
+          <a class="nav-link" href="#">compte</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
-        </li> #}
+          <a class="nav-link" href="{{path('app_logout')}}">Deconnecter</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">S'inscrire</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{path('app_login')}}">Connecter</a>
+        </li>
+        {% endif %}
       </ul>
     </div>
   </div>

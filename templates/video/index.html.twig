@@ -8,7 +8,7 @@
     {% for video in videos %}
         <article>
              <h2><a href="{{ path('app_video_show', {id: video.id}) }}">{{ video.id }} {{ video.title }} </a></h2>     
-            <p>{{ video.videoLink }}</p>
+            <iframe width="300" height="200" src={{video.videoLink}} ></iframe>
             <p>{{ video.description|u.truncate(10,'...',false)  }}</p>
             {# <p>Submitted {{ video.createdAt|date }}</p> #}
             <p>Submitted {{ video.createdAt|ago }}</p>  
@@ -16,4 +16,8 @@
     {% else %}
            <p> Sorry, no video yet </p>
     {% endfor %}
+
+    <div class="navigation">
+    {{ knp_pagination_render(videos) }}
+    </div>
 {% endblock %}
