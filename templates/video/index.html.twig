@@ -1,0 +1,19 @@
+{% extends 'base.html.twig'%}
+
+{% block title %}Video Center{% endblock %}
+
+{% block body %}
+    {% set video_count = videos|length %}
+    {{ video_count }}
+    {% for video in videos %}
+        <article>
+             <h2><a href="{{ path('app_video_show', {id: video.id}) }}">{{ video.id }} {{ video.title }} </a></h2>     
+            <p>{{ video.videoLink }}</p>
+            <p>{{ video.description|u.truncate(10,'...',false)  }}</p>
+            {# <p>Submitted {{ video.createdAt|date }}</p> #}
+            <p>Submitted {{ video.createdAt|ago }}</p>  
+        </article>
+    {% else %}
+           <p> Sorry, no video yet </p>
+    {% endfor %}
+{% endblock %}
