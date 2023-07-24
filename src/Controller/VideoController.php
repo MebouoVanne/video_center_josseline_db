@@ -50,6 +50,7 @@ class VideoController extends AbstractController
             $form = $this->createForm(VideoType::class, $video);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
+            $video -> setUser( $this->getUser());
             $manager->persist($video);
             $manager->flush();
             $this->addFlash(
