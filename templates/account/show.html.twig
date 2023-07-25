@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'Profile' %}
+{% block title%} Profile {% endblock %}
 {% block body %}
 	<div class="row">
 		<div class="col-md-6 mx-auto text-center">
@@ -12,6 +12,33 @@
 			<p>
 				<a href="{{ path('app_account_edit')}}">Modifier le compte</a>
 			</p>
+
+            <div class="row">
+                <div align="center" class="col-md-6 mx-auto">
+					<h3>Mes Vidéos</h3>
+					{% for video in app.user.videos %}
+						<article class="col-4">
+							<h3>
+								<a href={{ path('app_video_show', {id: video.id} ) }}>{{ video.title|u.truncate(30,'...',false) }}</a>
+							</h3>
+							<h5>{{ video.description|u.truncate(15,'...',false) }}</h5>
+							<p>Soumis {{ video.createdAt|ago }}
+							</p>
+							<p>Par {{ video.user.firstname ~ ' ' ~ video.user.lastname }}
+							</p>
+						</article>
+
+					{% else %}
+						<p>
+							Désolé, Pas encore de vidéo
+						</p>
+					{% endfor %}
+				</div>
+			</div>
+			<p>
+				<a href="{{path("app_account_edit")}}">Editer un compte</a>
+			</p>
+
 		</div>
 	</div>
 {% endblock %}
