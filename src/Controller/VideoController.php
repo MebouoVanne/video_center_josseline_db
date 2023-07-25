@@ -20,6 +20,12 @@ class VideoController extends AbstractController
         Request $request,
         PaginatorInterface $paginator,): Response
     {
+        if ($this->getUser()){
+            if (!$this->getUser()->isVerified()){
+            $this->addFlash('info', "Votre adresse email n'est pas vérifié.");
+            } 
+            }
+            
 
         $videos = $paginator->paginate(
             $videoRepository->findAll(),
@@ -46,6 +52,15 @@ class VideoController extends AbstractController
         EntityManagerInterface $manager,
     ): Response
     {
+        if ($this->getUser()){
+            if ($this->getUser()->isVerified() == false) {
+            $this->addFlash('error', 'Vous devez confirmer votre adresse e-mail!');
+            return $this->redirectToRoute('app_home');
+            } 
+            }else{
+            $this->addFlash('error', 'Vous devez vous connecter pour créer une vidéo!');
+            return $this->redirectToRoute('app_login');
+            }
             $video = new video;
             $form = $this->createForm(VideoType::class, $video);
             $form->handleRequest($request);
@@ -70,6 +85,19 @@ class VideoController extends AbstractController
         Video $video
     ): Response
     {
+        if ($this->getUser()){
+            if ($this->getUser()->isVerified() == false) {
+            $this->addFlash('error', 'Vous devez confirmer votre adresse e-mail! pour éditer une vidéo');
+            return $this->redirectToRoute('app_home');
+            }else if ($video->getUser()->getEmail() !== $this->getUser()->getEmail()){
+            $this->addFlash('error', "Vous devez être l'utilisateur ". $video->getUser()->getFirstname() . ' pour éditer !');
+            return $this->redirectToRoute('app_home');
+            } 
+            }else{
+            $this->addFlash('error', 'Vous devez vous connecter pour editer une vidéo!!');
+            return $this->redirectToRoute('app_login');
+            }
+            
             $form = $this->createForm(VideoType::class, $video);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
@@ -92,6 +120,19 @@ class VideoController extends AbstractController
         Video $video
     ): Response
     {
+        if ($this->getUser()){
+            if ($this->getUser()->isVerified() == false) {
+            $this->addFlash('error', 'Vous devez confirmer votre adresse e-mail! pour supprimer une vidéo');
+            return $this->redirectToRoute('app_home');
+            }else if ($video->getUser()->getEmail() !== $this->getUser()->getEmail()){
+            $this->addFlash('error', "Vous devez être l'utilisateur ". $video->getUser()->getFirstname() . ' pour éditer !');
+            return $this->redirectToRoute('app_home');
+            } 
+            }else{
+            $this->addFlash('error', 'Vous devez vous connecter pour supprimer une vidéo!!');
+            return $this->redirectToRoute('app_login');
+            }
+            
             $manager->remove($video);
             $manager->flush();
             $this->addFlash(
