@@ -21,11 +21,11 @@ class VideoType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => 'Titre'
             ])
-            ->add('videoLink', UrlType::class, [
-                'label' => 'Lien de la vidéo'
+            ->add('videoLink', TextType::class, [
+                'label' => 'Lien vidéo (YouTube)',
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'Description'
+                'label' => 'Description',
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

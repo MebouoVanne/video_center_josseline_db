@@ -23,7 +23,7 @@ class AppFixtures extends Fixture
         for($i = 0; $i <50; $i++){
             $video = new Video();
             $video->setTitle($this->faker->title())
-                    ->setVideoLink($this->faker->url())
+                    ->setVideoLink($this->faker->text())
                     ->setDescription($this->faker->text());
             
             $manager -> persist($video);

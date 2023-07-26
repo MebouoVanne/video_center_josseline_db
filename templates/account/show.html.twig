@@ -2,8 +2,7 @@
 
 {% block title%} Profile {% endblock %}
 {% block body %}
-	<div class="row">
-		<div class="col-md-6 mx-auto text-center">
+<div align="center">
 			<h1>Profile</h1>
 			<p>{{ app.user.email }}</p>
 			<h2>{{ app.user.firstname ~" "~ app.user.lastname }}</h2>
@@ -12,8 +11,8 @@
 			<p>
 				<a href="{{ path('app_account_edit')}}">Modifier le compte</a>
 			</p>
-
-            <div class="row">
+</div>
+            {# <div class="row">
                 <div align="center" class="col-md-6 mx-auto">
 					<h3>Mes Vidéos</h3>
 					{% for video in app.user.videos %}
@@ -34,11 +33,27 @@
 						</p>
 					{% endfor %}
 				</div>
-			</div>
+			</div> #}
+
+			{% for video in app.user.videos %}
+				<div class="col-4">
+					<div class="card h-60 ">
+						<div class="card-body mt-4">
+							<h3 class="card-title">
+								<a href="{{ path('app_video_show', {id: video.id}) }}">{{ video.id }}
+									{{ video.title }}
+								</a>
+							</h3>
+							<iframe width="300" height="200" src={{video.videoLink}}></iframe>
+							<p class="card-text">{{ video.description|u.truncate(10,'...',false)  }}</p>
+							<p>Submitted
+								{{ video.createdAt|ago }}</p>
+						</div>
+					</div>
+				</div>
+		{% endfor %}
 			<p>
 				<a href="{{path("app_account_edit")}}">Editer un compte</a>
 			</p>
 
-		</div>
-	</div>
 {% endblock %}

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Video;
 use App\Form\VideoType;
+use App\Form\SearchType;
+use App\Model\SearchData;
 use App\Repository\VideoRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,29 +16,45 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class VideoController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(
-        VideoRepository $videoRepository, 
-        Request $request,
-        PaginatorInterface $paginator,): Response
+    #[Route('/', name: 'app_home', methods: ['GET'])]
+    public function index(VideoRepository $videoRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        if ($this->getUser()){
-            if (!$this->getUser()->isVerified()){
-            $this->addFlash('info', "Votre adresse email n'est pas vérifié.");
-            } 
-            }
-            
-
-        $videos = $paginator->paginate(
-            $videoRepository->findAll(),
-            $request->query->getInt('page', 1),
+        $pagination = $paginator->paginate(
+            $videoRepository->paginationQuery(),
+            $request->query->get('page', 1),
             10
         );
+        $search = false;
 
-    
+        $searchData = new SearchData();
+        $form = $this->createForm(SearchType::class, $searchData);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $searchData->page = $request->query->getInt('page', 1);
+            // $voitures = $voituresRepository->findBySearch($searchData);
+            // dd($voitures);
+            $pagination = $paginator->paginate(
+                $videoRepository->findBySearch($searchData),
+                $request->query->get('page', 1),
+                2
+            );
+            return $this->render('video/index.html.twig', [
+
+                'form' => $form,
+                'pagination' => $pagination,
+                'search' => $search,
+                'searchData' => $searchData->q,
+                'videos' => $videoRepository->findBySearch($searchData)
+
+            ]);
+
+        }
+
         return $this->render('video/index.html.twig', [
-        'videos'=>$videos,
-            
+            'form' => $form->createView(),
+            'videos' => $videoRepository->findAll(),
+            'pagination' => $pagination,
+            'search' => $search,
         ]);
     }
 

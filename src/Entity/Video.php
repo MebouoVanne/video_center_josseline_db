@@ -40,6 +40,9 @@ class Video
     #[ORM\ManyToOne(inversedBy: 'videos')]
     private ?User $user = null;
 
+    #[ORM\Column]
+    private ?bool $isPremiumVideo = null;
+
 
     public function getId(): ?int
     {
@@ -90,6 +93,18 @@ class Video
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function isIsPremiumVideo(): ?bool
+    {
+        return $this->isPremiumVideo;
+    }
+
+    public function setIsPremiumVideo(bool $isPremiumVideo): static
+    {
+        $this->isPremiumVideo = $isPremiumVideo;
 
         return $this;
     }
