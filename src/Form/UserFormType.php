@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class UserFormType extends AbstractType
 {
@@ -22,6 +23,14 @@ class UserFormType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label' => 'E-mail'
+            ])
+            ->add('imageFile', VichImageType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'delete_label' => 'Supprimer votre profil image',
+                'download_uri' => true,
+                'image_uri' => true,
+                'asset_helper' => true,
             ])
         ;
     }
