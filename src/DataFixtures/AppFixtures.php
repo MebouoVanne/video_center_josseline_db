@@ -23,8 +23,9 @@ class AppFixtures extends Fixture
         for($i = 0; $i <50; $i++){
             $video = new Video();
             $video->setTitle($this->faker->title())
-                    ->setVideoLink($this->faker->text())
-                    ->setDescription($this->faker->text());
+                    ->setVideoLink('https://www.youtube.com/embed/'. $this->faker->regexify('[A-Za-z0-9_-]{11}'))
+                    ->setDescription($this->faker->text())
+                    ->setIsPremiumVideo(mt_rand(0, 1) == 1 ? true : false);
             
             $manager -> persist($video);
         }

@@ -9,7 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 
@@ -26,6 +27,19 @@ class VideoType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
+            ])
+            ->add('isPremiumVideo', CheckboxType::class, [
+                'attr' => [
+                    'class' => 'form-check-input',
+                ],
+                'required' => false,
+                'label' => 'est une video premium? ',
+                'label_attr' => [
+                    'class' => 'form-check-label'
+                ],
+                'constraints' => [
+                    new Assert\NotNull()
+                ]
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

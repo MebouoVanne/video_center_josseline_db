@@ -22,7 +22,7 @@ class VideoController extends AbstractController
         $pagination = $paginator->paginate(
             $videoRepository->paginationQuery(),
             $request->query->get('page', 1),
-            10
+            9
         );
         $search = false;
 
