@@ -259,5 +259,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->imageSize;
     }
 
+    /**
+     * Return only the security relevant data
+     *
+     * @return array
+     */
+    public function __serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+            'password' => $this->password,
+        ];
+    }
+
     
 }

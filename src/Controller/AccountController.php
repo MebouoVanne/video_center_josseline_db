@@ -15,6 +15,7 @@ class AccountController extends AbstractController
     public function show(): Response
     {
         return $this->render('account/show.html.twig', [
+            
         ]);
     }
 

@@ -47,6 +47,13 @@
 							</h3>
 							<iframe width="300" height="200" src={{video.videoLink}}></iframe>
 							<p class="card-text">{{ video.description|u.truncate(10,'...',false)  }}</p>
+							
+							{% if video.isPremiumVideo  %}
+							premium 
+							{% else %}
+                             non premium
+							{% endif %}
+							
 							<p>Submitted
 								{{ video.createdAt|ago }}</p>
 						</div>

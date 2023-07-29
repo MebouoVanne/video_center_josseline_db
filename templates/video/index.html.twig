@@ -13,26 +13,101 @@
 				<h1>Site Video center</h1>
 				<p>Bienvenue Chez nous</p>
 			</div>
+			{# {% for video in pagination %}
+				{% if  app.user and app.user.isVerified and  video.isPremiumVideo == true and video.isPremiumVideo == false  %}
+							<div class="col-4">
+								<div class="card h-60 ">
+									<div class="card-body mt-4">
+										<h3 class="card-title">
+											<a href="{{ path('app_video_show', {id: video.id}) }}">{{ video.id }}
+												{{ video.title }}
+											</a>
+										</h3>
+										<iframe width="300" height="200" src={{video.videoLink}}></iframe>
+										<p class="card-text">{{ video.description|u.truncate(10,'...',false)  }}</p>
+			
+										<p>Submitted
+											{{ video.createdAt|ago }}</p>
+									</div>
+								</div>
+							</div>
+						{% if  !app.user and !app.user.isVerified  and video.isPremiumVideo == false  %}
+						  <div class="col-4">
+								<div class="card h-60 ">
+									<div class="card-body mt-4">
+										<h3 class="card-title">
+											<a href="{{ path('app_video_show', {id: video.id}) }}">{{ video.id }}
+												{{ video.title }}
+											</a>
+										</h3>
+										<iframe width="300" height="200" src={{video.videoLink}}></iframe>
+										<p class="card-text">{{ video.description|u.truncate(10,'...',false)  }}</p>
+			
+										<p>Submitted
+											{{ video.createdAt|ago }}</p>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+					{% endif %}
+					{% endfor %} #}
+
+
 			{% for video in pagination %}
-				<div class="col-4">
-					<div class="card h-60 ">
-						<div class="card-body mt-4">
-							<h3 class="card-title">
-								<a href="{{ path('app_video_show', {id: video.id}) }}">{{ video.id }}
-									{{ video.title }}
-								</a>
-							</h3>
-							<iframe width="300" height="200" src={{video.videoLink}}></iframe>
-							<p class="card-text">{{ video.description|u.truncate(10,'...',false)  }}</p>
-							<p>Submitted
-								{{ video.createdAt|ago }}</p>
+				{% if video.isPremiumVideo %}
+					{% if app.user and app.user.isVerified %}
+						<div class="col-4">
+							<div class="card h-60">
+								<div class="card-body mt-4">
+									<h3 class="card-title">
+										<a href="{{ path('app_video_show', {id: video.id}) }}">
+											{{ video.id }}
+											{{ video.title }}
+										</a>
+									</h3>
+									<iframe width="300" height="200" src="{{ video.videoLink }}"></iframe>
+									<p class="card-text">{{ video.description|u.truncate(10,'...',false) }}</p>
+									<p>Premium *******</p>
+									<p>Submitted
+										{{ video.createdAt|ago }}</p>
+								</div>
+							</div>
+						</div>
+						
+					{% endif %}
+				{% else %}
+					<div class="col-4">
+						<div class="card h-60">
+							<div class="card-body mt-4">
+								<h3 class="card-title">
+									<a href="{{ path('app_video_show', {id: video.id}) }}">
+										{{ video.id }}
+										{{ video.title }}
+									</a>
+								</h3>
+								<iframe width="300" height="200" src="{{ video.videoLink }}"></iframe>
+								<p class="card-text">{{ video.description|u.truncate(10,'...',false) }}</p>
+								<p>Non Premium</p>
+								<p>Submitted
+									{{ video.createdAt|ago }}</p>
+							</div>
 						</div>
 					</div>
-				</div>
-		{% endfor %}
-	</section>
-</main>
+				{% endif %}
+			{% endfor %}
+		</section>
+	</main>
 
-<div class="navigation  mt-4">
-	{{ knp_pagination_render(pagination) }}
-</div>{% endblock %}
+
+
+	{% if app.user and app.user.isVerified %}
+			
+	{% else %}
+		<div class=" navigation d-flex justify-content-center">
+			{{ knp_pagination_render(pagination) }}
+		</div>
+
+	{% endif %}
+
+
+{% endblock %}

@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Video;
+ 
 use App\Form\VideoType;
 use App\Form\SearchType;
 use App\Model\SearchData;
+use App\Entity\Video;
 use App\Repository\VideoRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Security;
 
 class VideoController extends AbstractController
 {
@@ -71,7 +73,7 @@ class VideoController extends AbstractController
     ): Response
     {
         if ($this->getUser()){
-            if ($this->getUser()->isVerified() == false) {
+            if ($this->getUser()->isVerified() == false and video.isIsPremiumVideo() == true) {
             $this->addFlash('error', 'Vous devez confirmer votre adresse e-mail!');
             return $this->redirectToRoute('app_home');
             } 
@@ -100,7 +102,8 @@ class VideoController extends AbstractController
     public function edit(
         Request $request,
         EntityManagerInterface $manager,
-        Video $video
+        Video $video,
+        Security $security
     ): Response
     {
         if ($this->getUser()){
@@ -119,6 +122,16 @@ class VideoController extends AbstractController
             $form = $this->createForm(VideoType::class, $video);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
+
+                 // Set the user as the owner of the video
+            $user = $security->getUser();
+            $video->setUser($user);
+
+            // Save the video status (premium or not premium)
+            $isPremium = $form->get('premiumVideo')->getData();
+            $video->setIsPremiumVideo($isPremium);
+
+
             $manager->persist($video);
             $manager->flush();
 
