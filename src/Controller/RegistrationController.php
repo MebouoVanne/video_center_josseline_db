@@ -57,7 +57,7 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(new Address('noreply@pinterest.com', 'Pinterest'))
                     ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
+                    ->subject("Confirmez votre email s'il vous plait")
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
@@ -84,7 +84,7 @@ class RegistrationController extends AbstractController
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Votre adresse e-mail a été vérifiée!');
+        $this->addFlash('primary', 'Votre adresse e-mail a été vérifiée!');
 
         return $this->redirectToRoute('app_home');
     }

@@ -1,67 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title%} Profile {% endblock %}
-{% block body %}
-<div align="center">
-			<h1>Profile</h1>
-			<img style="max-width: 250px;" src={{ vich_uploader_asset(app.user, 'imageFile') }}>
-			<p>{{ app.user.email }}</p>
-			<h2>{{ app.user.firstname ~" "~ app.user.lastname }}</h2>
-			<p>Compte créé le
-				{{ app.user.createdAt|date }}</p>
-			<p>
-				<a href="{{ path('app_account_edit')}}">Modifier le compte</a>
-			</p>
-</div>
-            {# <div class="row">
-                <div align="center" class="col-md-6 mx-auto">
-					<h3>Mes Vidéos</h3>
-					{% for video in app.user.videos %}
-						<article class="col-4">
-							<h3>
-								<a href={{ path('app_video_show', {id: video.id} ) }}>{{ video.title|u.truncate(30,'...',false) }}</a>
-							</h3>
-							<h5>{{ video.description|u.truncate(15,'...',false) }}</h5>
-							<p>Soumis {{ video.createdAt|ago }}
-							</p>
-							<p>Par {{ video.user.firstname ~ ' ' ~ video.user.lastname }}
-							</p>
-						</article>
-
-					{% else %}
-						<p>
-							Désolé, Pas encore de vidéo
-						</p>
-					{% endfor %}
-				</div>
-			</div> #}
-
-			{% for video in app.user.videos %}
-				<div class="col-4">
-					<div class="card h-60 ">
-						<div class="card-body mt-4">
-							<h3 class="card-title">
-								<a href="{{ path('app_video_show', {id: video.id}) }}">{{ video.id }}
-									{{ video.title }}
-								</a>
-							</h3>
-							<iframe width="300" height="200" src={{video.videoLink}}></iframe>
-							<p class="card-text">{{ video.description|u.truncate(10,'...',false)  }}</p>
-							
-							{% if video.isPremiumVideo  %}
-							premium 
-							{% else %}
-                             non premium
-							{% endif %}
-							
-							<p>Submitted
-								{{ video.createdAt|ago }}</p>
-						</div>
-					</div>
-				</div>
-		{% endfor %}
-			<p>
-				<a href="{{path("app_account_edit")}}">Editer un compte</a>
-			</p>
-
+{% block title%}
+	Profile
 {% endblock %}
+{% block body %}
+
+	<div align="center">
+		<h1>Profile</h1>
+		<img style="max-width: 250px;" src={{ vich_uploader_asset(app.user, 'imageFile') }}>
+		<p>{{ app.user.email }}</p>
+		<h2>{{ app.user.firstname ~" "~ app.user.lastname }}</h2>
+		<p>Compte créé le
+			{{ app.user.createdAt|date }}</p>
+		<p>
+			<a href="{{ path('app_account_edit')}}">Modifier le compte</a>
+		</p>
+	<div>
+	<main class="container">
+		<section class="row">
+
+		{% for video in app.user.videos %}
+			{{ include("/partials/_card.html.twig") }}
+		{% else %}
+			<p>
+				Désole,aucune vidéo crée
+			</p>
+		{% endfor %}
+
+		{# <p>
+						<a href="{{path("app_account_edit")}}">Editer un compte</a>
+					</p> #}
+		</section>
+		<div class=" navigation d-flex justify-content-center mt-4">
+	{{ knp_pagination_render(videos) }}
+</div>
+</main>
+
+
+	{% endblock %}

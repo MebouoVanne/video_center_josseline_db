@@ -9,10 +9,11 @@
 		<p>{{ video.description }}</p>
 		<p>Soumis
 			{{ video.createdAt|date }}</p>
+			  <p>Par {{ video.user.firstname ~ " " ~ video.user.lastname }}</p>
 		<p>Dernière modification
 			{{ video.updatedAt|date("d/m/y H :i") }}</p>
 	</article>
-
+ {% if app.user and app.user.isVerified %}
 	<td>
 		<a href="{{ path('app_video_edit', { id: video.id }) }}">Modifier</a>
 	</td>
@@ -21,5 +22,5 @@
 	</td>
 
 	<a href="{{ path('app_home') }}">Go Back</a>
-
+{% endif %}
 	{% endblock %}

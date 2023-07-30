@@ -20,13 +20,21 @@ class VideoType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label' => 'Titre'
+                'label' => 'Titre',
+                // 'constraints' => [
+                //     new Assert\LessThan(20)
+                // ]
+
             ])
             ->add('videoLink', TextType::class, [
                 'label' => 'Lien vidéo (YouTube)',
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
+                // 'constraints' => [
+                //     new Assert\LessThan(20)
+                // ]
+
             ])
             ->add('isPremiumVideo', CheckboxType::class, [
                 'attr' => [

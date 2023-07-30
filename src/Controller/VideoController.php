@@ -106,6 +106,7 @@ class VideoController extends AbstractController
         Security $security
     ): Response
     {
+       
         if ($this->getUser()){
             if ($this->getUser()->isVerified() == false) {
             $this->addFlash('error', 'Vous devez confirmer votre adresse e-mail! pour éditer une vidéo');
@@ -118,18 +119,11 @@ class VideoController extends AbstractController
             $this->addFlash('error', 'Vous devez vous connecter pour editer une vidéo!!');
             return $this->redirectToRoute('app_login');
             }
-            
+ 
             $form = $this->createForm(VideoType::class, $video);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
 
-                 // Set the user as the owner of the video
-            $user = $security->getUser();
-            $video->setUser($user);
-
-            // Save the video status (premium or not premium)
-            $isPremium = $form->get('premiumVideo')->getData();
-            $video->setIsPremiumVideo($isPremium);
 
 
             $manager->persist($video);

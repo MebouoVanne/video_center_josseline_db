@@ -2,19 +2,31 @@
 
 namespace App\Controller;
 
+use App\Form\VideoType;
+use App\Entity\Video;
+use App\Repository\VideoRepository;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UserFormType;
 
 class AccountController extends AbstractController
 {
     #[Route('/account', name: 'app_account')]
-    public function show(): Response
+    public function show( VideoRepository $videoRepository, Request $request, PaginatorInterface $paginator): Response
     {
+
+        $videos = $paginator->paginate(
+            $videoRepository->findAll(), /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
         return $this->render('account/show.html.twig', [
+            'videos' => $videos,
             
         ]);
     }

@@ -64,7 +64,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?File $imageFile = null;
     
     #[ORM\Column(nullable: true)]
-    private ?string $imageName = null;
+    private ?string $imageName = "profile.png";
     
     #[ORM\Column(nullable: true)]
     private ?int $imageSize = null;

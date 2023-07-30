@@ -1,0 +1,25 @@
+
+<div class="card col-4 justify-content-between ">
+	<h4 class="card-title">
+		<a href="{{ path('app_video_show', {id: video.id}) }}">
+			{{ video.id }}
+			{{ video.title }}
+		</a>
+	</h4>
+	<iframe width="300" height="200" src="{{ video.videoLink }}"></iframe>
+	<div class="card-body">
+
+		<h4 class="card-text">{{ video.description|u.truncate(10,'...',false) }}</h4>
+
+        		<p>Soumis
+				{{ video.createdAt|ago }}</p>
+		{{ video.createdAt|ago }}</p>
+        <p>Par {{ video.user.firstname ~ " " ~ video.user.lastname }}</p>
+
+        {% if video.isPremiumVideo  %}
+			<p > Premium Video </p>
+		{% else %}
+			<p > Non premium </p>
+		{% endif %}
+</div></div> 
+
