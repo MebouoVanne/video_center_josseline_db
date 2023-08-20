@@ -1,25 +1,36 @@
+<div class="col">
+	<div class="card shadow-sm">
+		<iframe class="bd-placeholder-img card-img-top" width="300" height="200" src="{{ video.videoLink }}"></iframe>
+		<div class="card-body">
+			<p class="card-text">{{ video.description|u.truncate(10,'...',false) }}</p>
 
-<div class="card col-4 justify-content-between ">
-	<h4 class="card-title">
-		<a href="{{ path('app_video_show', {id: video.id}) }}">
-			{{ video.id }}
-			{{ video.title }}
-		</a>
-	</h4>
-	<iframe width="300" height="200" src="{{ video.videoLink }}"></iframe>
-	<div class="card-body">
-
-		<h4 class="card-text">{{ video.description|u.truncate(10,'...',false) }}</h4>
-
-        		<p>Soumis
-				{{ video.createdAt|ago }}</p>
-		{{ video.createdAt|ago }}</p>
-        <p>Par {{ video.user.firstname ~ " " ~ video.user.lastname }}</p>
-
-        {% if video.isPremiumVideo  %}
-			<p > Premium Video </p>
+		{% if video.isPremiumVideo  %}
+			<p class="card-text">
+				Premium Video
+				<i class="fa-brands fa-pagelines" style="color: #78a5f2;"></i>
+			</p>
 		{% else %}
-			<p > Non premium </p>
+			<p class="card-text">
+			
+				Non premium
+				<i class="fa-solid fa-xmark" style="color: #729fee;"></i>
+			</p>
 		{% endif %}
-</div></div> 
-
+		<div class="d-flex justify-content-between align-items-center">
+			<div class="btn-group">
+				<button type="button"  class="btn btn-sm btn-outline-secondary ">
+				<a  class="text-decoration-none text-dark"  href="{{ path('app_video_show', {id: video.id}) }}">Details</a>     
+				</button>
+				<button type="button" class="btn btn-sm btn-outline-secondary">
+				 {% if app.user and app.user.isVerified %}
+				 <a  class="text-decoration-none text-dark"  href="{{ path('app_video_edit', {id: video.id}) }}">Editer</a>     
+				  {% endif %}
+                </button>
+			</div>
+			 <small class="text-body-secondary ml-4">IL y a 
+				{{ video.createdAt|ago }} Par
+			{{ video.user.firstname ~ " " ~ video.user.lastname }}
+			</small>
+		</div>
+	</div>
+</div></div>

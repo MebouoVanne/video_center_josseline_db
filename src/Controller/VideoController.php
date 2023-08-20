@@ -21,11 +21,14 @@ class VideoController extends AbstractController
     #[Route('/', name: 'app_home', methods: ['GET'])]
     public function index(VideoRepository $videoRepository, Request $request, PaginatorInterface $paginator): Response
     {
+
+        $user = $this->getUser();
         $pagination = $paginator->paginate(
-            $videoRepository->paginationQuery(),
+            $videoRepository->paginationQuery($user),
             $request->query->get('page', 1),
             9
         );
+
         $search = false;
 
         $searchData = new SearchData();
@@ -33,20 +36,27 @@ class VideoController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $searchData->page = $request->query->getInt('page', 1);
-            // $voitures = $voituresRepository->findBySearch($searchData);
-            // dd($voitures);
             $pagination = $paginator->paginate(
                 $videoRepository->findBySearch($searchData),
                 $request->query->get('page', 1),
-                2
+                6
             );
+
+            $search = true;
+
+            // Obtenir le nombre total de vidéos trouvées lors de la recherche
+            $totalVideos = $pagination->getTotalItemCount();
+
+            // dd($totalVideos);
             return $this->render('video/index.html.twig', [
 
                 'form' => $form,
                 'pagination' => $pagination,
                 'search' => $search,
                 'searchData' => $searchData->q,
-                'videos' => $videoRepository->findBySearch($searchData)
+                'videos' => $videoRepository->findBySearch($searchData),
+                'totalVideos' =>  $totalVideos
+                
 
             ]);
 
@@ -57,12 +67,23 @@ class VideoController extends AbstractController
             'videos' => $videoRepository->findAll(),
             'pagination' => $pagination,
             'search' => $search,
+            'totalVideos' => $pagination->getTotalItemCount(),
         ]);
     }
 
     #[Route('/video/{id<[0-9]+>}', name: 'app_video_show', methods: 'GET')]
     public function show(Video $video): Response
     {
+        if ($this->getUser()){
+            if ($this->getUser()->isVerified() == false) {
+            $this->addFlash('error', 'Vous devez vous  loguer afin d\'avoir accèes aux vidéo premium');
+            return $this->redirectToRoute('app_home');
+            } 
+            }else{
+            $this->addFlash('error', 'vous devez vous enregistrer pour avoir accés aux vidéo premium!');
+            return $this->redirectToRoute('app_register');
+            }
+            
         return $this->render('video/show.html.twig', compact('video'));
     }
 
@@ -103,7 +124,6 @@ class VideoController extends AbstractController
         Request $request,
         EntityManagerInterface $manager,
         Video $video,
-        Security $security
     ): Response
     {
        

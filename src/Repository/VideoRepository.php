@@ -22,13 +22,35 @@ class VideoRepository extends ServiceEntityRepository
         parent::__construct($registry, Video::class);
     }
 
-    public function paginationQuery()
+    // public function paginationQuery()
+    // {
+    //     return $this->createQueryBuilder('a')
+    //         ->where('a.isPremium = :isPremium')
+    //         ->setParameter('isPremium', $this->getUser()? true : false)
+    //         ->orderBy('a.id', 'ASC')
+    //         ->getQuery()
+    //     ;
+    // }
+
+    public function paginationQuery($user)
     {
-        return $this->createQueryBuilder('a')
-            ->orderBy('a.id', 'ASC')
-            ->getQuery()
-        ;
+      $qb = $this->createQueryBuilder('v')
+      ->orderBy('v.id', 'ASC');
+
+  if ($user && $user->isVerified()) {
+      // L'utilisateur est connecté et vérifié, il peut voir toutes les vidéos premium et non premium
+      $qb->andWhere('v.isPremiumVideo = :isPremiumVideo OR v.isPremiumVideo = :isNotPremiumVideo')
+         ->setParameter('isPremiumVideo', true)
+         ->setParameter('isNotPremiumVideo', false);
+  } else {
+      // L'utilisateur n'est pas connecté ou n'est pas vérifié, il peut voir uniquement les vidéos non premium
+      $qb->andWhere('v.isPremiumVideo = :isPremiumVideo')
+         ->setParameter('isPremiumVideo', false);
+  }
+
+  return $qb->getQuery();
     }
+   
 
     public function findBySearch(SearchData $searchData)
     {
@@ -36,7 +58,7 @@ class VideoRepository extends ServiceEntityRepository
        ->addOrderBy('p.createdAt','DESC');
        if(!empty($searchData->q)){
          $data=$data
-         ->andWhere("p.title LIKE :q")
+         ->andWhere("p.title   LIKE :q OR p.description  LIKE :q")
          ->setParameter('q',"%{$searchData->q}%");
        }
        $data=$data
@@ -47,6 +69,8 @@ class VideoRepository extends ServiceEntityRepository
  
        return $data;
     }
+
+   
 
 //    /**
 //     * @return Video[] Returns an array of Video objects

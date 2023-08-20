@@ -2,29 +2,74 @@
 
 {% block body %}
 
-	{% set video_count = videos|length %}
-	{{ video_count }}
+	{# {% set video_count = videos|length %}
+		{{ video_count }} #}
 
-	{%  include 'search/_search_data.html.twig'  with {form:form} only  %}
+	<br>
 
-	<main class="container">
-		<section class="row">
-			<div class="col-12">
-				<h1>Site Video center</h1>
-				<p>Bienvenue Chez nous</p>
-			</div>		
-{% for video in pagination %}
-    {% if video.isPremiumVideo %}
-        {% if app.user and app.user.isVerified %}
-            {{ include("/partials/_card.html.twig") }}
-        {% endif %}
-    {% else %}
-        {{ include("/partials/_card.html.twig") }}
-    {% endif %}
-{% endfor %}
-	</section>
-</main>
+	{# {%  include 'search/_search_data.html.twig'  with {form:form} only  %} #}
 
-<div class=" navigation d-flex justify-content-center mt-4">
-	{{ knp_pagination_render(pagination) }}
-</div>{% endblock %}
+
+	{# <main class="container">
+			<section class="row"> #}
+		<div class="col-12"> <section class="py-5 text-center container">
+			<div class="row py-lg-5">
+				<div class="col-lg-6 col-md-8 mx-auto">
+					<h1 class="fw-light">Site Video Center</h1>
+					<p class="lead text-body-secondary">Bienvenu Chez nous</p>
+					<p class="lead text-body-secondary">Pour pouvoir avoir accés aux vidéos premium vous n'avez qu'a creer un compte</p>
+					{# <p>
+						<a href="#" class="btn btn-primary my-2">Main call to action</a>
+						<a href="#" class="btn btn-secondary my-2">Secondary action</a>
+					</p> #}
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<div>
+		{%  include 'search/_search_data.html.twig'  with {form:form} only  %}
+	</div>
+	<br>
+	<div>
+		<h3>
+
+			{% if search == true %}
+				{{ totalVideos }}
+				video(s) trouvée(s) avec le terme
+				{{ searchData }}
+			{% endif %}
+			<h3>
+	</div>
+
+
+			<main class="container">
+				<div class="album py-5 bg-body-tertiary">
+					<div class="container">
+
+						<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+
+							{% for video in pagination %}
+								{% if video.isPremiumVideo %}
+									{% if app.user and app.user.isVerified %}
+										{{ include("/partials/_card.html.twig") }}
+									{% endif %}
+								{% else %}
+									{{ include("/partials/_card.html.twig") }}
+								{% endif %}
+							{% endfor %}
+
+							{# <p>
+																			<a href="{{path("app_account_edit")}}">Editer un compte</a>
+																		</p> #}
+						</div>
+					</div>
+				</div>
+			</main>
+
+
+			<div class=" navigation d-flex justify-content-center mt-4">
+				{{ knp_pagination_render(pagination) }}
+			</div>
+		{% endblock %}

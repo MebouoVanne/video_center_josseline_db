@@ -25,6 +25,8 @@ class UserFormType extends AbstractType
                 'label' => 'E-mail'
             ])
             ->add('imageFile', VichImageType::class, [
+                'label' => "elecharger l'image",
+                'download_label' => 'Telecharger',
                 'required' => false,
                 'allow_delete' => true,
                 'delete_label' => 'Supprimer votre profil image',
