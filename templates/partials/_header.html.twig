@@ -12,13 +12,14 @@
 							<a class="nav-link" href="{{path('app_video_create')}}">Créer une Vidéo</a>
 						</li>
 					{% endif %}
-					<li class="nav-item">
+					<li class="nav-item mr-5">
 						<a class="nav-link" href="{{ path ('app_account')}}">Compte</a>
 					</li>
 					<li class="nav-item ml-auto">
 						<a class="nav-link" href="{{ path('app_logout')}}">Deconnexion</a>
 					</li>
 				{% else %}
+			
 					<li class="nav-item">
 						<a class="nav-link" href="{{ path('app_register')}}">S'enregistrer</a>
 					</li>

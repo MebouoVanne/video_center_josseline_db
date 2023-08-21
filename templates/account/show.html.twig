@@ -11,33 +11,35 @@
 		<p>{{ app.user.email }}</p>
 		<h2>{{ app.user.firstname ~" "~ app.user.lastname }}</h2>
 		<p>Compte créé le
-			{{ app.user.createdAt|date }}</p>
-		<p>
-			<a href="{{ path('app_account_edit')}}">Modifier le compte</a>
+			{{ app.user.createdAt|date }}
 		</p>
-	<div>
-	<main class="container">
-	<div class="album py-5 bg-body-tertiary">
-    <div class="container">
 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-		
+		<button type="button" class="btn btn-sm btn-outline-secondary">
+			<a class="text-decoration-none text-primary h3" href="{{ path('app_account_edit')}}">Modifier le compte</a>
+		</button>
+		<div>
+			<main class="container">
+				<div class="album py-5 bg-body-tertiary">
+					<div class="container">
 
-		{% for video in app.user.videos %}
-			{{ include("/partials/_card.html.twig") }}
-		{% else %}
-			<p>
-				Désole,aucune vidéo crée
-			</p>
-		{% endfor %}
-
-		{# <p>
-						<a href="{{path("app_account_edit")}}">Editer un compte</a>
-					</p> #}
-		</div>
-		</div>
-		</div>
-</main>
+						<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
 
-	{% endblock %}
+							{% for video in app.user.videos %}
+								{{ include("/partials/_card.html.twig") }}
+							{% else %}
+								<p>
+									Désole,aucune vidéo crée
+								</p>
+							{% endfor %}
+
+							{# <p>
+													<a href="{{path("app_account_edit")}}">Editer un compte</a>
+												</p> #}
+						</div>
+					</div>
+				</div>
+			</main>
+
+
+		{% endblock %}

@@ -1,8 +1,13 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-	{{ video.title }}
+<div class="mt-4">
+{{ video.title }}
+</div>
+	
 {% endblock %}
 {% block body %}
+<div class = "row">
+<div class = "col-md-6 mx-auto text-center">
 	<article>
 		<h1>{{ video.title }}</h1>
 		<iframe width="640" height="480" src={{video.videoLink}}></iframe>
@@ -13,15 +18,18 @@
 		<p>Dernière modification
 			{{ video.updatedAt|date("d/m/y H :i") }}</p>
 	</article>
- {% if app.user and app.user.isVerified %}
-	<td>
-		<a href="{{ path('app_video_edit', { id: video.id }) }}">Modifier</a>
-	</td>
-	<td>
-		<a href="{{ path('app_video_delete', { id: video.id }) }}">Supprimer</a>
-	</td>
+ {% if app.user and app.user.isVerified and video.user == app.user %}
+	<button type="button" class="btn btn-sm btn-outline-secondary">
+		<a  class="text-decoration-none text-primary h3" href="{{ path('app_video_edit', { id: video.id }) }}">Modifier</a>
+	</button>
+	<button type="button" class="btn btn-sm btn-outline-secondary">
+		<a class="text-decoration-none text-primary h3" href="{{ path('app_video_delete', { id: video.id }) }}">Supprimer</a>
+	</button>
+
 {% endif %}
-	<td>
-	<a href="{{ path('app_home') }}">Go Back</a> 
-	</td>  
+	<button type="button" class="btn btn-sm btn-outline-secondary">
+	<a class="text-decoration-none text-primary h3" href="{{ path('app_home') }}">Retour</a> 
+	</button>  
+</div>
+</div>
 	{% endblock %}
