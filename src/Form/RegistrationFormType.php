@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class RegistrationFormType extends AbstractType
 {
@@ -20,13 +21,25 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('firstname', TextType::class, [
-                'label' => 'Nom'
+                'label' => 'Nom',
+                // 'constraints' => [
+                //     new NotBlank(["message" => "Veuillez entrer un nom"]),
+                //     new Length(["min" => 2, "minMessage" => "vous devez entrer au minimun 2 caractères"])
+                // ]
             ])
             ->add('lastname', TextType::class, [
-                'label' => 'Prénom'
+                'label' => 'Prénom',
+                //  'constraints' => [
+                //     new NotBlank(["message" => "Veuillez entrer un nom"]),
+                //     new Length(["min" => 2, "minMessage" => "vous devez entrer au minimun 2 caractères"])
+                // ]
             ])
             ->add('email', EmailType::class, [
-                'label' => 'E-mail'
+                'label' => 'E-mail',
+                // 'constraints' => [
+                //     new NotBlank(["message" => "Veuillez entrer un nom"]),
+                //     new Length(["min" => 5, "minMessage" => "vous devez entrer au minimun 5 caractères"])
+                // ]
             ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,

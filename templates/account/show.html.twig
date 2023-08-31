@@ -10,8 +10,9 @@
 		<img style="max-width: 250px;" src={{ vich_uploader_asset(app.user, 'imageFile') }}>
 		<p>{{ app.user.email }}</p>
 		<h2>{{ app.user.firstname ~" "~ app.user.lastname }}</h2>
-		<p>Compte créé le
-			{{ app.user.createdAt|date }}
+		<p>Compte creé le
+		{{ app.user.createdAt|date('d-m-Y ')  }}
+			
 		</p>
 
 		<button type="button" class="btn btn-sm btn-outline-secondary">

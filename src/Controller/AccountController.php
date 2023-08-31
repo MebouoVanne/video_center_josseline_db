@@ -19,6 +19,10 @@ class AccountController extends AbstractController
     #[Route('/account', name: 'app_account')]
     public function show( VideoRepository $videoRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        if (!$this->getUser()) {
+            $this->addFlash("error","Vous n'avez pas de compte veiller créer un compte");
+           return $this->redirectToRoute('app_register');
+       }
 
         $videos = $paginator->paginate(
             $videoRepository->findAll(), /* query NOT result */

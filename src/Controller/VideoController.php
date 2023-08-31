@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
 
 class VideoController extends AbstractController
 {
@@ -74,15 +73,12 @@ class VideoController extends AbstractController
     #[Route('/video/{id<[0-9]+>}', name: 'app_video_show', methods: 'GET')]
     public function show(Video $video): Response
     {
-        if ($this->getUser()){
-            if ($this->getUser()->isVerified() == false) {
-            $this->addFlash('error', 'Vous devez vous  loguer afin d\'avoir accèes aux vidéo premium');
-            return $this->redirectToRoute('app_home');
-            } 
-            }else{
-            $this->addFlash('error', 'vous devez vous enregistrer pour avoir accés aux vidéo premium!');
-            return $this->redirectToRoute('app_register');
-            }
+        if ($video->isIsPremiumVideo() && (!$this->getUser() || !$this->getUser()->isVerified())) {
+            $this->addFlash("error","Vous n'êtes pas autorisé à avoir accès aux vidéo premium.");
+           return $this->redirectToRoute('app_login');
+       }
+
+   
             
         return $this->render('video/show.html.twig', compact('video'));
     }
@@ -93,15 +89,14 @@ class VideoController extends AbstractController
         EntityManagerInterface $manager,
     ): Response
     {
-        if ($this->getUser()){
-            if ($this->getUser()->isVerified() == false and video.isIsPremiumVideo() == true) {
-            $this->addFlash('error', 'Vous devez confirmer votre adresse e-mail!');
-            return $this->redirectToRoute('app_home');
-            } 
-            }else{
-            $this->addFlash('error', 'Vous devez vous connecter pour créer une vidéo!');
-            return $this->redirectToRoute('app_login');
-            }
+    
+        if ((!$this->getUser() || !$this->getUser()->isVerified())) {
+            $this->addFlash("error","Vous devez confirmer votre  e-mail pour pouvoir creer une video!");
+           return $this->redirectToRoute('app_home');
+       }
+   
+        
+        
             $video = new video;
             $form = $this->createForm(VideoType::class, $video);
             $form->handleRequest($request);
@@ -170,11 +165,11 @@ class VideoController extends AbstractController
             $this->addFlash('error', 'Vous devez confirmer votre adresse e-mail! pour supprimer une vidéo');
             return $this->redirectToRoute('app_home');
             }else if ($video->getUser()->getEmail() !== $this->getUser()->getEmail()){
-            $this->addFlash('error', "Vous devez être l'utilisateur ". $video->getUser()->getFirstname() . ' pour éditer !');
+            $this->addFlash('error', "Vous devez être l'utilisateur ". $video->getUser()->getFirstname() . ' pour supprimer!');
             return $this->redirectToRoute('app_home');
             } 
             }else{
-            $this->addFlash('error', 'Vous devez vous connecter pour supprimer une vidéo!!');
+            $this->addFlash('error', ' Vous devez vous connecter pour supprimer une vidéo!!');
             return $this->redirectToRoute('app_login');
             }
             

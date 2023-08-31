@@ -25,7 +25,7 @@ class Video
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank(message:"Veuillez entrer un titre")]
     #[Assert\Length(min: 3, minMessage:"vous devez entrer au minimun 3 caractères")]
-    #[Assert\NotIdenticalTo(value: "merde")]
+    #[Assert\NotIdenticalTo(value: "merde",message:"vous ne pouvez pas entrer des grossièreté")]
     private ?string $title = null;
 
     #[ORM\Column(length: 500)]
@@ -34,7 +34,7 @@ class Video
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank(message:"Veuillez entrer une description")]
     #[Assert\Length(min: 20,minMessage:"vous devez entrer au minimun 20 caractères")]
-    #[Assert\NotIdenticalTo(value:"wesh")]
+    #[Assert\NotIdenticalTo(value:"wesh",message:"vous ne pouvez pas entrer des grossièreté")]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'videos')]

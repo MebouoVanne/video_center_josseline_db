@@ -31,12 +31,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank(message:"Veuillez entrer un nom")]
-    #[Assert\Length(min: 3, minMessage:"vous devez entrer au minimun 3 caractères")]
+    #[Assert\Length(min: 2, minMessage:"vous devez entrer au minimun 2 caractères")]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank(message:"Veuillez entrer un prenom")]
-    #[Assert\Length(min: 3, minMessage:"vous devez entrer au minimun 3 caractères")]
+    #[Assert\Length(min: 2, minMessage:"vous devez entrer au minimun 2 caractères")]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 180, unique: true)]

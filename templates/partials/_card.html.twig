@@ -18,17 +18,20 @@
 		{% endif %}
 		<div class="d-flex justify-content-between align-items-center">
 			<div class="btn-group">
+			
 				<button type="button"  class="btn btn-sm btn-outline-secondary ">
 				<a  class="text-decoration-none text-dark"  href="{{ path('app_video_show', {id: video.id}) }}">Details</a>     
 				</button>
+				{% if app.user and app.user.isVerified %}
+				{%  if video.user == app.user%}
 				<button type="button" class="btn btn-sm btn-outline-secondary">
-				 {% if app.user and app.user.isVerified %}
 				 <a  class="text-decoration-none text-dark"  href="{{ path('app_video_edit', {id: video.id}) }}">Editer</a>     
+				  {% endif %}
 				  {% endif %}
                 </button>
 			</div>
 			 <small class="text-body-secondary ml-4">IL y a 
-				{{ video.createdAt|ago }} Par
+				{{ video.createdAt|date('d-m-Y ')  }} Par
 			{{ video.user.firstname ~ " " ~ video.user.lastname }}
 			</small>
 		</div>
